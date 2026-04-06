@@ -8,285 +8,484 @@
 <style>
 :root {
   --brand: #5C2450;
-  --brand-light: #7A3A6E;
-  --brand-dark: #3D1835;
-  --bg: #0f0f14;
-  --bg-card: #1a1a24;
-  --bg-card-hover: #222233;
-  --text: #e8e8f0;
-  --text-muted: #8888aa;
-  --green: #2ecc71;
-  --red: #e74c3c;
-  --orange: #f39c12;
-  --blue: #3498db;
+  --brand-light: #7a3a6c;
+  --brand-dark: #3e1836;
+  --accent: #e6a817;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg: #f4f5f7;
+  --card: #ffffff;
+  --text: #1e1e2f;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
   --sidebar-w: 260px;
+  --radius: 12px;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
+[data-theme="dark"] {
+  --bg: #0f1117;
+  --card: #1a1c25;
+  --text: #e4e4e7;
+  --text-muted: #9ca3af;
+  --border: #2d2f3a;
+  --brand-light: #9b6490;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
-  overflow-x: hidden;
+  line-height: 1.6;
+  zoom: 0.8;
+  min-height: 100vh;
+  display: flex;
 }
-@media (min-width: 769px) {
-  body { zoom: 0.8; }
-}
-
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
-  position: fixed; top: 0; left: 0; width: var(--sidebar-w); height: 100vh;
+  width: var(--sidebar-w);
   background: linear-gradient(180deg, var(--brand-dark) 0%, var(--brand) 100%);
-  padding: 24px 20px; z-index: 100;
-  transition: transform 0.3s ease;
+  color: #fff;
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: transform .3s ease;
   overflow-y: auto;
 }
-.sidebar .logo { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-.sidebar .subtitle { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 32px; }
-.sidebar nav a {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px; margin-bottom: 4px; border-radius: 8px;
-  color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13px;
-  transition: all 0.2s;
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
 }
-.sidebar nav a:hover, .sidebar nav a.active {
-  background: rgba(255,255,255,0.12); color: #fff;
+.sidebar-logo h2 { font-size: 16px; font-weight: 700; letter-spacing: .5px; }
+.sidebar-logo span { font-size: 11px; opacity: .65; display: block; margin-top: 2px; }
+.sidebar-nav { padding: 16px 0; flex: 1; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 24px;
+  color: rgba(255,255,255,.75);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: all .2s;
 }
-.sidebar nav a .icon { width: 18px; text-align: center; }
-.sidebar .period-badge {
-  margin-top: 28px; padding: 12px; border-radius: 8px;
-  background: rgba(255,255,255,0.08); font-size: 12px; color: rgba(255,255,255,0.7);
-  line-height: 1.6;
+.sidebar-nav a:hover, .sidebar-nav a.active {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border-left-color: var(--accent);
 }
-.sidebar .period-badge strong { color: #fff; display: block; margin-bottom: 4px; }
-
-/* Hamburger */
+.sidebar-nav a svg { width: 18px; height: 18px; flex-shrink: 0; }
+.nav-divider {
+  height: 1px;
+  background: rgba(255,255,255,.12);
+  margin: 12px 24px;
+}
+.nav-label {
+  padding: 6px 24px 8px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: rgba(255,255,255,.35);
+  font-weight: 600;
+}
+.sidebar-footer {
+  padding: 18px 24px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  font-size: 11px; opacity: .5;
+}
+/* HAMBURGER */
 .hamburger {
-  display: none; position: fixed; top: 16px; left: 16px; z-index: 200;
-  background: var(--brand); border: none; border-radius: 8px;
-  width: 44px; height: 44px; cursor: pointer; color: #fff; font-size: 20px;
+  display: none;
+  position: fixed;
+  top: 14px; left: 14px;
+  z-index: 200;
+  background: var(--brand);
+  border: none;
+  color: #fff;
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
 }
+.hamburger svg { width: 22px; height: 22px; }
 .overlay {
-  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5); z-index: 99;
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 90;
 }
-
-@media (max-width: 768px) {
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
-  .hamburger { display: flex; align-items: center; justify-content: center; }
-  .overlay.show { display: block; }
-  .main { margin-left: 0 !important; padding: 70px 16px 24px !important; }
-}
-
-/* Main */
+/* MAIN */
 .main {
+  flex: 1;
   margin-left: var(--sidebar-w);
-  padding: 32px 36px;
-  min-height: 100vh;
+  padding: 32px 40px;
+  max-width: 1280px;
 }
-.main h1 {
-  font-size: 26px; font-weight: 700; margin-bottom: 4px;
+/* HEADER */
+.header {
+  margin-bottom: 32px;
 }
-.main .header-sub {
-  color: var(--text-muted); font-size: 13px; margin-bottom: 28px;
+.header h1 { font-size: 26px; font-weight: 700; color: var(--brand); }
+[data-theme="dark"] .header h1 { color: var(--brand-light); }
+.header .period {
+  font-size: 14px; color: var(--text-muted);
+  margin-top: 4px;
 }
-
-/* KPI Cards */
+.header-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+.theme-toggle {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex; align-items: center; gap: 6px;
+}
+/* KPI CARDS */
 .kpi-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px; margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 32px;
 }
 .kpi-card {
-  background: var(--bg-card); border-radius: 12px; padding: 22px;
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: all 0.2s;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  position: relative;
+  overflow: hidden;
 }
-.kpi-card:hover { background: var(--bg-card-hover); transform: translateY(-2px); }
-.kpi-card .label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-.kpi-card .value { font-size: 32px; font-weight: 700; }
-.kpi-card .detail { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
-.kpi-card .trend { font-size: 12px; margin-top: 4px; }
-.kpi-card .trend.up { color: var(--green); }
-.kpi-card .trend.down { color: var(--red); }
-.kpi-card .trend.neutral { color: var(--orange); }
-
-/* Chart containers */
-.charts-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
-  gap: 20px; margin-bottom: 32px;
+.kpi-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 4px; height: 100%;
 }
-.chart-box {
-  background: var(--bg-card); border-radius: 12px; padding: 24px;
-  border: 1px solid rgba(255,255,255,0.06);
+.kpi-card.purple::before { background: var(--brand); }
+.kpi-card.gold::before { background: var(--accent); }
+.kpi-card.red::before { background: var(--danger); }
+.kpi-card.green::before { background: var(--success); }
+.kpi-card.blue::before { background: #3498db; }
+.kpi-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .7px; font-weight: 600; }
+.kpi-value { font-size: 32px; font-weight: 800; margin: 6px 0 2px; }
+.kpi-sub { font-size: 12.5px; color: var(--text-muted); }
+.kpi-trend { font-size: 12px; margin-top: 4px; }
+.kpi-trend.up { color: var(--success); }
+.kpi-trend.down { color: var(--danger); }
+.kpi-trend.neutral { color: var(--warning); }
+/* SECTION */
+.section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 24px;
 }
-.chart-box h3 {
-  font-size: 15px; font-weight: 600; margin-bottom: 16px;
-  display: flex; align-items: center; gap: 8px;
+.section-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.chart-box h3 .dot { width: 8px; height: 8px; border-radius: 50%; }
-.chart-box canvas { max-height: 320px; }
-
-/* Full-width chart */
-.chart-full {
-  background: var(--bg-card); border-radius: 12px; padding: 24px;
-  border: 1px solid rgba(255,255,255,0.06); margin-bottom: 32px;
+.section-title svg { width: 20px; height: 20px; color: var(--brand); }
+[data-theme="dark"] .section-title svg { color: var(--brand-light); }
+/* CHART CONTAINERS */
+.chart-container { width: 100%; overflow-x: auto; }
+.chart-container canvas { max-height: 320px; }
+/* TWO-COL */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+/* ANOMALY */
+.anomaly-list { list-style: none; }
+.anomaly-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  line-height: 1.6;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
 }
-.chart-full h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
-
-/* Anomaly box */
-.anomaly-box {
-  background: linear-gradient(135deg, rgba(92,36,80,0.15), rgba(92,36,80,0.05));
-  border: 1px solid rgba(92,36,80,0.3); border-radius: 12px;
-  padding: 24px; margin-bottom: 32px;
+.anomaly-list li:last-child { border-bottom: none; }
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
-.anomaly-box h3 { font-size: 15px; font-weight: 600; margin-bottom: 14px; color: #d4a5ce; }
-.anomaly-box ul { list-style: none; }
-.anomaly-box li {
-  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-  font-size: 13px; line-height: 1.5; display: flex; gap: 10px; align-items: flex-start;
+.badge-warn { background: rgba(245,158,11,.15); color: var(--warning); }
+[data-theme="dark"] .badge-warn { background: rgba(245,158,11,.2); }
+.badge-good { background: rgba(34,197,94,.12); color: var(--success); }
+[data-theme="dark"] .badge-good { background: rgba(34,197,94,.2); }
+.badge-info { background: rgba(52,152,219,.12); color: #3498db; }
+[data-theme="dark"] .badge-info { background: rgba(52,152,219,.2); }
+/* TABLE */
+.data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
 }
-.anomaly-box li:last-child { border-bottom: none; }
-.anomaly-box .badge {
-  display: inline-block; padding: 2px 8px; border-radius: 4px;
-  font-size: 11px; font-weight: 600; white-space: nowrap; flex-shrink: 0;
+.data-table thead th {
+  background: var(--brand);
+  color: #fff;
+  padding: 11px 14px;
+  text-align: right;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: .3px;
+  white-space: nowrap;
 }
-.badge-warn { background: rgba(243,156,18,0.2); color: #f39c12; }
-.badge-good { background: rgba(46,204,113,0.2); color: #2ecc71; }
-.badge-info { background: rgba(52,152,219,0.2); color: #3498db; }
-
-/* Table */
-.table-container {
-  background: var(--bg-card); border-radius: 12px; padding: 24px;
-  border: 1px solid rgba(255,255,255,0.06); margin-bottom: 32px;
-  overflow-x: auto;
+.data-table thead th:first-child { text-align: left; border-radius: 8px 0 0 0; }
+.data-table thead th:last-child { border-radius: 0 8px 0 0; }
+.data-table tbody td {
+  padding: 10px 14px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
 }
-.table-container h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
-table {
-  width: 100%; border-collapse: collapse; font-size: 12.5px;
+.data-table tbody td:first-child { text-align: left; font-weight: 600; }
+.data-table tbody tr:hover { background: rgba(92,36,80,.04); }
+[data-theme="dark"] .data-table tbody tr:hover { background: rgba(155,100,144,.08); }
+.data-table tfoot td {
+  font-weight: 700;
+  padding: 11px 14px;
+  text-align: right;
+  background: rgba(92,36,80,.06);
 }
-thead th {
-  background: rgba(92,36,80,0.2); color: var(--text-muted);
-  padding: 10px 12px; text-align: left; font-weight: 600;
-  border-bottom: 2px solid rgba(92,36,80,0.3); white-space: nowrap;
-  font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px;
+[data-theme="dark"] .data-table tfoot td { background: rgba(155,100,144,.1); }
+.data-table tfoot td:first-child { text-align: left; border-radius: 0 0 0 8px; }
+.data-table tfoot td:last-child { border-radius: 0 0 8px 0; }
+.cell-good { color: var(--success); font-weight: 600; }
+.cell-warn { color: var(--warning); font-weight: 600; }
+.cell-bad { color: var(--danger); font-weight: 600; }
+/* FOOTER */
+.footer-text {
+  text-align: center;
+  padding: 24px 0 12px;
+  font-size: 12px;
+  color: var(--text-muted);
 }
-tbody td {
-  padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04);
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .hamburger { display: flex; }
+  .overlay.show { display: block; }
+  .main { margin-left: 0; padding: 24px 18px; padding-top: 68px; }
+  .two-col { grid-template-columns: 1fr; }
 }
-tbody tr:hover { background: rgba(92,36,80,0.08); }
-.cell-good { color: var(--green); font-weight: 600; }
-.cell-warn { color: var(--orange); font-weight: 600; }
-.cell-bad { color: var(--red); font-weight: 600; }
-
-/* Footer */
-.footer {
-  text-align: center; padding: 24px; color: var(--text-muted);
-  font-size: 11px; border-top: 1px solid rgba(255,255,255,0.05);
+@media (max-width: 600px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  body { zoom: 1; }
+}
+/* PRINT */
+@media print {
+  .sidebar, .hamburger, .overlay, .theme-toggle { display: none !important; }
+  .main { margin-left: 0; padding: 20px; }
+  .section { break-inside: avoid; }
 }
 </style>
 </head>
 <body>
+<!-- HAMBURGER -->
+<button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+<div class="overlay" onclick="toggleSidebar()"></div>
 
-<button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
-<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
+<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <div class="logo">&#128230; 4PX KPI</div>
-  <div class="subtitle">Diamond Plus / Království TianDe</div>
-  <nav>
-    <a href="#overview" class="active"><span class="icon">&#128200;</span> Přehled KPI</a>
-    <a href="#kpi-trend"><span class="icon">&#128201;</span> Trendy KPI</a>
-    <a href="#orders"><span class="icon">&#128230;</span> Objem objednávek</a>
-    <a href="#carriers"><span class="icon">&#128666;</span> Přepravci</a>
-    <a href="#processing"><span class="icon">&#9201;</span> Doba zpracování</a>
-    <a href="#inbound"><span class="icon">&#128229;</span> Příjem zboží</a>
-    <a href="#anomalies"><span class="icon">&#9888;</span> Anomálie</a>
-    <a href="#table"><span class="icon">&#128203;</span> Detailní tabulka</a>
+  <div class="sidebar-logo">
+    <h2>DIAMOND PLUS</h2>
+    <span>Království TianDe</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">Navigace</div>
+    <a href="https://rkonfal.github.io/diamond-plus-portal/">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
+      🏠 Portál
+    </a>
+    <a href="https://rkonfal.github.io/diamond-plus-report/">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      💎 Finanční Dashboard
+    </a>
+    <a href="https://rkonfal.github.io/4px-obalovy-material/">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      📦 Obalový materiál
+    </a>
+    <a href="https://rkonfal.github.io/4px-kpi-dashboard/" class="active">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m6 0h6m-6 0V9a2 2 0 012-2h2a2 2 0 012 2v10m6 0v-4a2 2 0 00-2-2h-2a2 2 0 00-2 2v4"/></svg>
+      📊 Delivery KPI
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-label">Sekce</div>
+    <a href="#overview">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+      Přehled KPI
+    </a>
+    <a href="#kpi-trend">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+      Trendy KPI
+    </a>
+    <a href="#orders">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      Objem objednávek
+    </a>
+    <a href="#carriers">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 17h8M8 17l-2-6h12l-2 6M8 17H6l-2-4h16l-2 4h-2M12 3v4"/></svg>
+      Přepravci
+    </a>
+    <a href="#processing">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Doba zpracování
+    </a>
+    <a href="#inbound">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      Příjem zboží
+    </a>
+    <a href="#anomalies">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01M5.07 19H19a2 2 0 001.75-2.96l-6.93-12a2 2 0 00-3.5 0l-6.93 12A2 2 0 005.07 19z"/></svg>
+      Anomálie
+    </a>
+    <a href="#table">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+      Detailní tabulka
+    </a>
   </nav>
-  <div class="period-badge">
-    <strong>Sledované období</strong>
-    04/2025, 08/2025 – 03/2026<br>
-    9 měsíčních reportů<br>
-    Sklad: 4PX, Praha
+  <div class="sidebar-footer">
+    Report vygenerován 05.04.2026<br>
+    4PX Fulfillment Data
   </div>
 </aside>
 
-<main class="main">
-  <h1 id="overview">4PX Delivery KPI Dashboard — Diamond Plus</h1>
-  <div class="header-sub">Měsíční přehled výkonnostních ukazatelů skladu 4PX pro Království TianDe &nbsp;|&nbsp; Období: 04/2025, 08/2025 – 03/2026 &nbsp;|&nbsp; Vygenerováno: 5. 4. 2026</div>
+<!-- MAIN -->
+<div class="main">
+  <!-- HEADER -->
+  <div class="header" id="overview">
+    <div class="header-row">
+      <div>
+        <h1>4PX Delivery KPI Dashboard</h1>
+        <div class="period">Období: 04/2025, 08/2025 – 03/2026 &nbsp;|&nbsp; 9 měsíčních reportů &nbsp;|&nbsp; Diamond Plus / Království TianDe</div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        Tmavý režim
+      </button>
+    </div>
+  </div>
 
   <!-- KPI CARDS -->
   <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="label">KPI Expedice (03/2026)</div>
-      <div class="value" style="color: var(--green)">100,0 %</div>
-      <div class="detail">11 983 objednávek zpracováno</div>
-      <div class="trend up">&#9650; +2,0 p.b. oproti 02/2026</div>
+    <div class="kpi-card green">
+      <div class="kpi-label">KPI Expedice (03/2026)</div>
+      <div class="kpi-value" style="color:var(--success)">100,0 %</div>
+      <div class="kpi-sub">11 983 objednávek zpracováno</div>
+      <div class="kpi-trend up">▲ +2,0 p.b. oproti 02/2026</div>
     </div>
-    <div class="kpi-card">
-      <div class="label">KPI Příjmu (03/2026)</div>
-      <div class="value" style="color: var(--green)">100,0 %</div>
-      <div class="detail">50 příjmů zpracováno</div>
-      <div class="trend up">&#9650; +3,4 p.b. oproti 02/2026</div>
+    <div class="kpi-card green">
+      <div class="kpi-label">KPI Příjmu (03/2026)</div>
+      <div class="kpi-value" style="color:var(--success)">100,0 %</div>
+      <div class="kpi-sub">50 příjmů zpracováno</div>
+      <div class="kpi-trend up">▲ +3,4 p.b. oproti 02/2026</div>
     </div>
-    <div class="kpi-card">
-      <div class="label">Kvalita expedice (03/2026)</div>
-      <div class="value" style="color: var(--green)">100,0 %</div>
-      <div class="detail">135 932 kusů expedováno</div>
-      <div class="trend neutral">&#9644; stabilní</div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Kvalita expedice (03/2026)</div>
+      <div class="kpi-value" style="color:var(--success)">100,0 %</div>
+      <div class="kpi-sub">135 932 kusů expedováno</div>
+      <div class="kpi-trend neutral">— stabilní</div>
     </div>
-    <div class="kpi-card">
-      <div class="label">Celkem objednávek (období)</div>
-      <div class="value" style="color: #d4a5ce">103 857</div>
-      <div class="detail">Průměr: 11 540 / měsíc</div>
-      <div class="trend neutral">Max: 16 206 (11/2025)</div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Celkem objednávek (období)</div>
+      <div class="kpi-value" style="color:var(--brand)">103 857</div>
+      <div class="kpi-sub">Průměr: 11 540 / měsíc</div>
+      <div class="kpi-trend neutral">Max: 16 206 (11/2025)</div>
     </div>
-    <div class="kpi-card">
-      <div class="label">Prům. doba zpracování (03/2026)</div>
-      <div class="value" style="color: var(--blue)">14,8 h</div>
-      <div class="detail">Medián: 14,8 h</div>
-      <div class="trend up">&#9650; Nejlepší za celé období</div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">Prům. doba zpracování (03/2026)</div>
+      <div class="kpi-value" style="color:#3498db">14,8 h</div>
+      <div class="kpi-sub">Medián: 14,8 h</div>
+      <div class="kpi-trend up">▲ Nejlepší za celé období</div>
     </div>
-    <div class="kpi-card">
-      <div class="label">Průměrné KPI Expedice</div>
-      <div class="value" style="color: var(--green)">99,0 %</div>
-      <div class="detail">Vážený průměr za 9 měsíců</div>
-      <div class="trend neutral">Min: 91,0 % (12/2025)</div>
-    </div>
-  </div>
-
-  <!-- CHART GRID -->
-  <div class="charts-grid" id="kpi-trend">
-    <div class="chart-box">
-      <h3><span class="dot" style="background:var(--green)"></span>Trend KPI Expedice &amp; Příjmu</h3>
-      <canvas id="chartKPI"></canvas>
-    </div>
-    <div class="chart-box" id="orders">
-      <h3><span class="dot" style="background:var(--blue)"></span>Objem objednávek (Outbound)</h3>
-      <canvas id="chartOrders"></canvas>
+    <div class="kpi-card gold">
+      <div class="kpi-label">Průměrné KPI Expedice</div>
+      <div class="kpi-value" style="color:var(--accent)">99,0 %</div>
+      <div class="kpi-sub">Vážený průměr za 9 měsíců</div>
+      <div class="kpi-trend neutral">Min: 91,0 % (12/2025)</div>
     </div>
   </div>
 
-  <div class="charts-grid" id="carriers">
-    <div class="chart-box">
-      <h3><span class="dot" style="background:var(--orange)"></span>Rozdělení dle přepravce</h3>
-      <canvas id="chartCarriers"></canvas>
+  <!-- KPI TREND CHART -->
+  <div class="two-col" id="kpi-trend">
+    <div class="section">
+      <div class="section-title">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        Trend KPI Expedice &amp; Příjmu
+      </div>
+      <div class="chart-container">
+        <canvas id="chartKPI"></canvas>
+      </div>
     </div>
-    <div class="chart-box" id="processing">
-      <h3><span class="dot" style="background:#9b59b6"></span>Průměrná doba zpracování (hodiny)</h3>
-      <canvas id="chartProcessing"></canvas>
+    <div class="section" id="orders">
+      <div class="section-title">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m6 0h6m-6 0V9a2 2 0 012-2h2a2 2 0 012 2v10m6 0v-4a2 2 0 00-2-2h-2a2 2 0 00-2 2v4"/></svg>
+        Objem objednávek (Outbound)
+      </div>
+      <div class="chart-container">
+        <canvas id="chartOrders"></canvas>
+      </div>
     </div>
   </div>
 
-  <div class="chart-full" id="inbound">
-    <h3>&#128229; Příjem zboží (Inbound) — KPI plnění</h3>
-    <canvas id="chartInbound" style="max-height:300px"></canvas>
+  <!-- CARRIERS + PROCESSING -->
+  <div class="two-col" id="carriers">
+    <div class="section">
+      <div class="section-title">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 17h8M8 17l-2-6h12l-2 6M8 17H6l-2-4h16l-2 4h-2M12 3v4"/></svg>
+        Rozdělení dle přepravce
+      </div>
+      <div class="chart-container">
+        <canvas id="chartCarriers"></canvas>
+      </div>
+    </div>
+    <div class="section" id="processing">
+      <div class="section-title">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Průměrná doba zpracování (hodiny)
+      </div>
+      <div class="chart-container">
+        <canvas id="chartProcessing"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- INBOUND CHART -->
+  <div class="section" id="inbound">
+    <div class="section-title">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      Příjem zboží (Inbound) — KPI plnění
+    </div>
+    <div class="chart-container">
+      <canvas id="chartInbound" style="max-height:300px"></canvas>
+    </div>
   </div>
 
   <!-- ANOMALIES -->
-  <div class="anomaly-box" id="anomalies">
-    <h3>&#9888;&#65039; Identifikované anomálie a trendy</h3>
-    <ul>
+  <div class="section" id="anomalies">
+    <div class="section-title">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01M5.07 19H19a2 2 0 001.75-2.96l-6.93-12a2 2 0 00-3.5 0l-6.93 12A2 2 0 005.07 19z"/></svg>
+      Identifikované anomálie a trendy
+    </div>
+    <ul class="anomaly-list">
       <li><span class="badge badge-warn">VAROVÁNÍ</span><span><strong>Prosinec 2025 — propad KPI Expedice na 91,0 %</strong> — výrazný pokles oproti průměru (99,0 %). Pravděpodobně způsobeno vánočním vytížením a svátky. Nejhorší hodnota za celé sledované období.</span></li>
       <li><span class="badge badge-warn">VAROVÁNÍ</span><span><strong>Listopad 2025 — nejvyšší doba zpracování 26,3 h</strong> — průměrná doba zpracování vzrostla o 47 % oproti říjnu. Korelace s rekordním objemem 16 206 objednávek (Black Friday efekt).</span></li>
       <li><span class="badge badge-warn">VAROVÁNÍ</span><span><strong>KPI Příjmu pod 90 % ve třech měsících</strong> — srpen (87,0 %), říjen (89,3 %), listopad (83,6 %). Opakující se problém s včasným zpracováním příjmu zboží na skladu.</span></li>
@@ -299,377 +498,436 @@ tbody tr:hover { background: rgba(92,36,80,0.08); }
   </div>
 
   <!-- DATA TABLE -->
-  <div class="table-container" id="table">
-    <h3>&#128203; Detailní měsíční data</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Měsíc</th>
-          <th>KPI Expedice</th>
-          <th>KPI Příjmu</th>
-          <th>Kvalita exp.</th>
-          <th>Objednávky</th>
-          <th>Česká pošta</th>
-          <th>Packeta</th>
-          <th>DPD CZ</th>
-          <th>DPD SK</th>
-          <th>Ostatní</th>
-          <th>Kusy exp.</th>
-          <th>Příjmy</th>
-          <th>Příjem splněno</th>
-          <th>Prům. čas (h)</th>
-          <th>Medián čas (h)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>04/2025</strong></td>
-          <td class="cell-good">99,98 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td>13 831</td>
-          <td>10 077</td>
-          <td>2 758</td>
-          <td>251</td>
-          <td>713</td>
-          <td>32</td>
-          <td>180 052</td>
-          <td>80</td>
-          <td class="cell-good">80/80</td>
-          <td>18,1</td>
-          <td>15,7</td>
-        </tr>
-        <tr>
-          <td><strong>08/2025</strong></td>
-          <td class="cell-good">99,94 %</td>
-          <td class="cell-warn">87,0 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td>11 556</td>
-          <td>8 732</td>
-          <td>2 131</td>
-          <td>202</td>
-          <td>477</td>
-          <td>14</td>
-          <td>129 454</td>
-          <td>54</td>
-          <td class="cell-warn">47/54</td>
-          <td>18,8</td>
-          <td>15,8</td>
-        </tr>
-        <tr>
-          <td><strong>09/2025</strong></td>
-          <td class="cell-good">99,93 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td class="cell-good">99,92 %</td>
-          <td>10 834</td>
-          <td>8 395</td>
-          <td>1 625</td>
-          <td>157</td>
-          <td>638</td>
-          <td>19</td>
-          <td>113 951</td>
-          <td>57</td>
-          <td class="cell-good">57/57</td>
-          <td>17,7</td>
-          <td>16,1</td>
-        </tr>
-        <tr>
-          <td><strong>10/2025</strong></td>
-          <td class="cell-good">99,22 %</td>
-          <td class="cell-warn">89,3 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td>11 012</td>
-          <td>10 229</td>
-          <td>0</td>
-          <td>181</td>
-          <td>581</td>
-          <td>21</td>
-          <td>115 863</td>
-          <td>56</td>
-          <td class="cell-warn">50/56</td>
-          <td>19,4</td>
-          <td>16,0</td>
-        </tr>
-        <tr>
-          <td><strong>11/2025</strong></td>
-          <td class="cell-good">99,95 %</td>
-          <td class="cell-bad">83,6 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td>16 206</td>
-          <td>15 078</td>
-          <td>0</td>
-          <td>244</td>
-          <td>873</td>
-          <td>11</td>
-          <td>189 447</td>
-          <td>55</td>
-          <td class="cell-bad">46/55</td>
-          <td>26,3</td>
-          <td>20,2</td>
-        </tr>
-        <tr>
-          <td><strong>12/2025</strong></td>
-          <td class="cell-bad">90,97 %</td>
-          <td class="cell-good">96,3 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td>8 338</td>
-          <td>6 400</td>
-          <td>1 347</td>
-          <td>165</td>
-          <td>407</td>
-          <td>19</td>
-          <td>87 862</td>
-          <td>54</td>
-          <td class="cell-good">52/54</td>
-          <td>25,2</td>
-          <td>18,2</td>
-        </tr>
-        <tr>
-          <td><strong>01/2026</strong></td>
-          <td class="cell-good">98,02 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td>9 904</td>
-          <td>7 642</td>
-          <td>1 564</td>
-          <td>177</td>
-          <td>501</td>
-          <td>20</td>
-          <td>115 857</td>
-          <td>50</td>
-          <td class="cell-good">50/50</td>
-          <td>18,3</td>
-          <td>14,8</td>
-        </tr>
-        <tr>
-          <td><strong>02/2026</strong></td>
-          <td class="cell-good">99,99 %</td>
-          <td class="cell-good">96,6 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td>10 193</td>
-          <td>7 847</td>
-          <td>1 675</td>
-          <td>155</td>
-          <td>495</td>
-          <td>21</td>
-          <td>105 683</td>
-          <td>58</td>
-          <td class="cell-good">56/58</td>
-          <td>19,4</td>
-          <td>15,9</td>
-        </tr>
-        <tr style="background: rgba(46,204,113,0.06);">
-          <td><strong>03/2026</strong></td>
-          <td class="cell-good">100,0 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td class="cell-good">100,0 %</td>
-          <td>11 983</td>
-          <td>9 359</td>
-          <td>1 867</td>
-          <td>190</td>
-          <td>546</td>
-          <td>21</td>
-          <td>135 932</td>
-          <td>50</td>
-          <td class="cell-good">50/50</td>
-          <td>14,8</td>
-          <td>14,8</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr style="font-weight:600; background:rgba(92,36,80,0.1);">
-          <td>CELKEM / PRŮMĚR</td>
-          <td>99,0 %</td>
-          <td>94,9 %</td>
-          <td>99,99 %</td>
-          <td>103 857</td>
-          <td>83 759</td>
-          <td>12 967</td>
-          <td>1 722</td>
-          <td>5 231</td>
-          <td>178</td>
-          <td>1 174 101</td>
-          <td>514</td>
-          <td>488/514</td>
-          <td>19,8</td>
-          <td>16,4</td>
-        </tr>
-      </tfoot>
-    </table>
+  <div class="section" id="table">
+    <div class="section-title">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+      Detailní měsíční data
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Měsíc</th>
+            <th>KPI Expedice</th>
+            <th>KPI Příjmu</th>
+            <th>Kvalita exp.</th>
+            <th>Objednávky</th>
+            <th>Česká pošta</th>
+            <th>Packeta</th>
+            <th>DPD CZ</th>
+            <th>DPD SK</th>
+            <th>Ostatní</th>
+            <th>Kusy exp.</th>
+            <th>Příjmy</th>
+            <th>Příjem splněno</th>
+            <th>Prům. čas (h)</th>
+            <th>Medián čas (h)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>04/2025</td>
+            <td class="cell-good">99,98 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td>13 831</td>
+            <td>10 077</td>
+            <td>2 758</td>
+            <td>251</td>
+            <td>713</td>
+            <td>32</td>
+            <td>180 052</td>
+            <td>80</td>
+            <td class="cell-good">80/80</td>
+            <td>18,1</td>
+            <td>15,7</td>
+          </tr>
+          <tr>
+            <td>08/2025</td>
+            <td class="cell-good">99,94 %</td>
+            <td class="cell-warn">87,0 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td>11 556</td>
+            <td>8 732</td>
+            <td>2 131</td>
+            <td>202</td>
+            <td>477</td>
+            <td>14</td>
+            <td>129 454</td>
+            <td>54</td>
+            <td class="cell-warn">47/54</td>
+            <td>18,8</td>
+            <td>15,8</td>
+          </tr>
+          <tr>
+            <td>09/2025</td>
+            <td class="cell-good">99,93 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td class="cell-good">99,92 %</td>
+            <td>10 834</td>
+            <td>8 395</td>
+            <td>1 625</td>
+            <td>157</td>
+            <td>638</td>
+            <td>19</td>
+            <td>113 951</td>
+            <td>57</td>
+            <td class="cell-good">57/57</td>
+            <td>17,7</td>
+            <td>16,1</td>
+          </tr>
+          <tr>
+            <td>10/2025</td>
+            <td class="cell-good">99,22 %</td>
+            <td class="cell-warn">89,3 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td>11 012</td>
+            <td>10 229</td>
+            <td>0</td>
+            <td>181</td>
+            <td>581</td>
+            <td>21</td>
+            <td>115 863</td>
+            <td>56</td>
+            <td class="cell-warn">50/56</td>
+            <td>19,4</td>
+            <td>16,0</td>
+          </tr>
+          <tr>
+            <td>11/2025</td>
+            <td class="cell-good">99,95 %</td>
+            <td class="cell-bad">83,6 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td>16 206</td>
+            <td>15 078</td>
+            <td>0</td>
+            <td>244</td>
+            <td>873</td>
+            <td>11</td>
+            <td>189 447</td>
+            <td>55</td>
+            <td class="cell-bad">46/55</td>
+            <td>26,3</td>
+            <td>20,2</td>
+          </tr>
+          <tr>
+            <td>12/2025</td>
+            <td class="cell-bad">90,97 %</td>
+            <td class="cell-good">96,3 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td>8 338</td>
+            <td>6 400</td>
+            <td>1 347</td>
+            <td>165</td>
+            <td>407</td>
+            <td>19</td>
+            <td>87 862</td>
+            <td>54</td>
+            <td class="cell-good">52/54</td>
+            <td>25,2</td>
+            <td>18,2</td>
+          </tr>
+          <tr>
+            <td>01/2026</td>
+            <td class="cell-good">98,02 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td>9 904</td>
+            <td>7 642</td>
+            <td>1 564</td>
+            <td>177</td>
+            <td>501</td>
+            <td>20</td>
+            <td>115 857</td>
+            <td>50</td>
+            <td class="cell-good">50/50</td>
+            <td>18,3</td>
+            <td>14,8</td>
+          </tr>
+          <tr>
+            <td>02/2026</td>
+            <td class="cell-good">99,99 %</td>
+            <td class="cell-good">96,6 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td>10 193</td>
+            <td>7 847</td>
+            <td>1 675</td>
+            <td>155</td>
+            <td>495</td>
+            <td>21</td>
+            <td>105 683</td>
+            <td>58</td>
+            <td class="cell-good">56/58</td>
+            <td>19,4</td>
+            <td>15,9</td>
+          </tr>
+          <tr>
+            <td>03/2026</td>
+            <td class="cell-good">100,0 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td class="cell-good">100,0 %</td>
+            <td>11 983</td>
+            <td>9 359</td>
+            <td>1 867</td>
+            <td>190</td>
+            <td>546</td>
+            <td>21</td>
+            <td>135 932</td>
+            <td>50</td>
+            <td class="cell-good">50/50</td>
+            <td>14,8</td>
+            <td>14,8</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>CELKEM / PRŮMĚR</td>
+            <td>99,0 %</td>
+            <td>94,9 %</td>
+            <td>99,99 %</td>
+            <td>103 857</td>
+            <td>83 759</td>
+            <td>12 967</td>
+            <td>1 722</td>
+            <td>5 231</td>
+            <td>178</td>
+            <td>1 174 101</td>
+            <td>514</td>
+            <td>488/514</td>
+            <td>19,8</td>
+            <td>16,4</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
   </div>
 
-  <div class="footer">
-    4PX Delivery KPI Dashboard — Diamond Plus / Království TianDe &nbsp;|&nbsp; Vygenerováno automaticky &nbsp;|&nbsp; Data: 04/2025, 08/2025 – 03/2026
+  <!-- FOOTER -->
+  <div class="footer-text">
+    Diamond Plus s.r.o. / Království TianDe &nbsp;|&nbsp; 4PX Delivery KPI Dashboard &nbsp;|&nbsp; Vygenerováno 05.04.2026
   </div>
-</main>
+</div>
 
 <script>
-const labels = ['04/25','08/25','09/25','10/25','11/25','12/25','01/26','02/26','03/26'];
-const brandRGB = '92,36,80';
+// Theme
+function toggleTheme() {
+  const d = document.documentElement;
+  const isDark = d.getAttribute('data-theme') === 'dark';
+  d.setAttribute('data-theme', isDark ? '' : 'dark');
+  initCharts();
+}
 
-Chart.defaults.color = '#8888aa';
-Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
-Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
-
-// KPI Trend Chart
-new Chart(document.getElementById('chartKPI'), {
-  type: 'line',
-  data: {
-    labels,
-    datasets: [
-      {
-        label: 'KPI Expedice (%)',
-        data: [99.98, 99.94, 99.93, 99.22, 99.95, 90.97, 98.02, 99.99, 100.0],
-        borderColor: '#2ecc71', backgroundColor: 'rgba(46,204,113,0.1)',
-        tension: 0.3, fill: true, pointRadius: 5, pointHoverRadius: 7
-      },
-      {
-        label: 'KPI Příjmu (%)',
-        data: [100.0, 87.04, 100.0, 89.29, 83.64, 96.30, 100.0, 96.55, 100.0],
-        borderColor: '#3498db', backgroundColor: 'rgba(52,152,219,0.1)',
-        tension: 0.3, fill: true, pointRadius: 5, pointHoverRadius: 7
-      },
-      {
-        label: 'Kvalita expedice (%)',
-        data: [100.0, 100.0, 99.92, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0],
-        borderColor: '#f39c12', backgroundColor: 'rgba(243,156,18,0.05)',
-        tension: 0.3, fill: false, pointRadius: 4, pointHoverRadius: 6,
-        borderDash: [5,3]
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } },
-      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + ' %' } }
-    },
-    scales: {
-      y: { min: 80, max: 102, ticks: { callback: v => v + ' %' } }
-    }
-  }
-});
-
-// Orders Volume Chart
-new Chart(document.getElementById('chartOrders'), {
-  type: 'bar',
-  data: {
-    labels,
-    datasets: [{
-      label: 'Počet objednávek',
-      data: [13831, 11556, 10834, 11012, 16206, 8338, 9904, 10193, 11983],
-      backgroundColor: labels.map((_, i) => i === 4 ? 'rgba(231,76,60,0.7)' : i === 8 ? 'rgba(46,204,113,0.7)' : `rgba(${brandRGB},0.6)`),
-      borderColor: labels.map((_, i) => i === 4 ? '#e74c3c' : i === 8 ? '#2ecc71' : '#7A3A6E'),
-      borderWidth: 1, borderRadius: 6
-    }]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => ctx.parsed.y.toLocaleString('cs-CZ') + ' objednávek' } }
-    },
-    scales: { y: { beginAtZero: true, ticks: { callback: v => (v/1000).toFixed(0) + 'k' } } }
-  }
-});
-
-// Carrier Breakdown Chart
-new Chart(document.getElementById('chartCarriers'), {
-  type: 'bar',
-  data: {
-    labels,
-    datasets: [
-      { label: 'Česká pošta', data: [10077,8732,8395,10229,15078,6400,7642,7847,9359], backgroundColor: 'rgba(231,76,60,0.7)', borderRadius: 3 },
-      { label: 'Packeta', data: [2758,2131,1625,0,0,1347,1564,1675,1867], backgroundColor: 'rgba(46,204,113,0.7)', borderRadius: 3 },
-      { label: 'DPD CZ', data: [251,202,157,181,244,165,177,155,190], backgroundColor: 'rgba(52,152,219,0.7)', borderRadius: 3 },
-      { label: 'DPD SK', data: [713,477,638,581,873,407,501,495,546], backgroundColor: 'rgba(243,156,18,0.7)', borderRadius: 3 },
-      { label: 'Ostatní', data: [32,14,19,21,11,19,20,21,21], backgroundColor: 'rgba(149,165,166,0.5)', borderRadius: 3 }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom', labels: { padding: 12, usePointStyle: true, pointStyle: 'rect', boxWidth: 12 } }
-    },
-    scales: {
-      x: { stacked: true },
-      y: { stacked: true, ticks: { callback: v => (v/1000).toFixed(0) + 'k' } }
-    }
-  }
-});
-
-// Processing Time Chart
-new Chart(document.getElementById('chartProcessing'), {
-  type: 'line',
-  data: {
-    labels,
-    datasets: [
-      {
-        label: 'Průměr (h)',
-        data: [18.1, 18.8, 17.7, 19.4, 26.3, 25.2, 18.3, 19.4, 14.8],
-        borderColor: '#9b59b6', backgroundColor: 'rgba(155,89,182,0.1)',
-        tension: 0.3, fill: true, pointRadius: 5, pointHoverRadius: 7
-      },
-      {
-        label: 'Medián (h)',
-        data: [15.7, 15.8, 16.1, 16.0, 20.2, 18.2, 14.8, 15.9, 14.8],
-        borderColor: '#1abc9c', backgroundColor: 'rgba(26,188,156,0.05)',
-        tension: 0.3, fill: false, pointRadius: 4, pointHoverRadius: 6,
-        borderDash: [5,3]
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } },
-      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + ' h' } }
-    },
-    scales: { y: { min: 10, ticks: { callback: v => v + ' h' } } }
-  }
-});
-
-// Inbound KPI Chart
-new Chart(document.getElementById('chartInbound'), {
-  type: 'bar',
-  data: {
-    labels,
-    datasets: [
-      {
-        label: 'Splněno',
-        data: [80,47,57,50,46,52,50,56,50],
-        backgroundColor: 'rgba(46,204,113,0.7)', borderRadius: 4
-      },
-      {
-        label: 'Nesplněno',
-        data: [0,7,0,6,9,2,0,2,0],
-        backgroundColor: 'rgba(231,76,60,0.7)', borderRadius: 4
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'rect', boxWidth: 12 } },
-      tooltip: { mode: 'index' }
-    },
-    scales: {
-      x: { stacked: true },
-      y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Počet příjmů' } }
-    }
-  }
-});
-
-// Sidebar navigation
+// Sidebar
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('show');
+  document.querySelector('.overlay').classList.toggle('show');
 }
-document.querySelectorAll('.sidebar nav a').forEach(a => {
-  a.addEventListener('click', function(e) {
-    document.querySelectorAll('.sidebar nav a').forEach(x => x.classList.remove('active'));
-    this.classList.add('active');
-    if(window.innerWidth <= 768) toggleSidebar();
+
+// Chart colors based on theme
+function getChartColors() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  return {
+    text: isDark ? '#9ca3af' : '#6b7280',
+    grid: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)',
+    green: '#22c55e',
+    blue: '#3498db',
+    orange: '#f59e0b',
+    red: '#ef4444',
+    purple: '#5C2450',
+    purpleLight: isDark ? '#9b6490' : '#7a3a6c',
+    indigo: '#6366f1',
+    teal: '#14b8a6'
+  };
+}
+
+const labels = ['04/25','08/25','09/25','10/25','11/25','12/25','01/26','02/26','03/26'];
+const brandRGB = '92,36,80';
+let charts = {};
+
+function initCharts() {
+  const c = getChartColors();
+
+  Chart.defaults.color = c.text;
+  Chart.defaults.borderColor = c.grid;
+  Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
+
+  // Destroy existing charts
+  Object.values(charts).forEach(ch => ch.destroy());
+  charts = {};
+
+  // KPI Trend Chart
+  charts.kpi = new Chart(document.getElementById('chartKPI'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'KPI Expedice (%)',
+          data: [99.98, 99.94, 99.93, 99.22, 99.95, 90.97, 98.02, 99.99, 100.0],
+          borderColor: c.green, backgroundColor: c.green + '18',
+          tension: 0.3, fill: true, pointRadius: 5, pointHoverRadius: 7
+        },
+        {
+          label: 'KPI Příjmu (%)',
+          data: [100.0, 87.04, 100.0, 89.29, 83.64, 96.30, 100.0, 96.55, 100.0],
+          borderColor: c.blue, backgroundColor: c.blue + '18',
+          tension: 0.3, fill: true, pointRadius: 5, pointHoverRadius: 7
+        },
+        {
+          label: 'Kvalita expedice (%)',
+          data: [100.0, 100.0, 99.92, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0],
+          borderColor: c.orange, backgroundColor: c.orange + '0d',
+          tension: 0.3, fill: false, pointRadius: 4, pointHoverRadius: 6,
+          borderDash: [5,3]
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + ' %' } }
+      },
+      scales: {
+        y: { min: 80, max: 102, ticks: { callback: v => v + ' %' } }
+      }
+    }
+  });
+
+  // Orders Volume Chart
+  charts.orders = new Chart(document.getElementById('chartOrders'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Počet objednávek',
+        data: [13831, 11556, 10834, 11012, 16206, 8338, 9904, 10193, 11983],
+        backgroundColor: labels.map((_, i) => i === 4 ? c.red + 'b3' : i === 8 ? c.green + 'b3' : `rgba(${brandRGB},0.6)`),
+        borderColor: labels.map((_, i) => i === 4 ? c.red : i === 8 ? c.green : c.purpleLight),
+        borderWidth: 1, borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.parsed.y.toLocaleString('cs-CZ') + ' objednávek' } }
+      },
+      scales: { y: { beginAtZero: true, ticks: { callback: v => (v/1000).toFixed(0) + 'k' } } }
+    }
+  });
+
+  // Carrier Breakdown Chart
+  charts.carriers = new Chart(document.getElementById('chartCarriers'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Česká pošta', data: [10077,8732,8395,10229,15078,6400,7642,7847,9359], backgroundColor: c.purple + 'b3', borderRadius: 3 },
+        { label: 'Packeta', data: [2758,2131,1625,0,0,1347,1564,1675,1867], backgroundColor: c.green + 'b3', borderRadius: 3 },
+        { label: 'DPD CZ', data: [251,202,157,181,244,165,177,155,190], backgroundColor: c.blue + 'b3', borderRadius: 3 },
+        { label: 'DPD SK', data: [713,477,638,581,873,407,501,495,546], backgroundColor: c.orange + 'b3', borderRadius: 3 },
+        { label: 'Ostatní', data: [32,14,19,21,11,19,20,21,21], backgroundColor: '#9ca3af80', borderRadius: 3 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { padding: 12, usePointStyle: true, pointStyle: 'rect', boxWidth: 12 } }
+      },
+      scales: {
+        x: { stacked: true },
+        y: { stacked: true, ticks: { callback: v => (v/1000).toFixed(0) + 'k' } }
+      }
+    }
+  });
+
+  // Processing Time Chart
+  charts.processing = new Chart(document.getElementById('chartProcessing'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Průměr (h)',
+          data: [18.1, 18.8, 17.7, 19.4, 26.3, 25.2, 18.3, 19.4, 14.8],
+          borderColor: c.purpleLight, backgroundColor: c.purpleLight + '18',
+          tension: 0.3, fill: true, pointRadius: 5, pointHoverRadius: 7
+        },
+        {
+          label: 'Medián (h)',
+          data: [15.7, 15.8, 16.1, 16.0, 20.2, 18.2, 14.8, 15.9, 14.8],
+          borderColor: c.teal, backgroundColor: c.teal + '0d',
+          tension: 0.3, fill: false, pointRadius: 4, pointHoverRadius: 6,
+          borderDash: [5,3]
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' } },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + ' h' } }
+      },
+      scales: { y: { min: 10, ticks: { callback: v => v + ' h' } } }
+    }
+  });
+
+  // Inbound KPI Chart
+  charts.inbound = new Chart(document.getElementById('chartInbound'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Splněno',
+          data: [80,47,57,50,46,52,50,56,50],
+          backgroundColor: c.green + 'b3', borderRadius: 4
+        },
+        {
+          label: 'Nesplněno',
+          data: [0,7,0,6,9,2,0,2,0],
+          backgroundColor: c.red + 'b3', borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'rect', boxWidth: 12 } },
+        tooltip: { mode: 'index' }
+      },
+      scales: {
+        x: { stacked: true },
+        y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Počet příjmů' } }
+      }
+    }
+  });
+}
+
+// Init
+initCharts();
+
+// Active nav on scroll
+const sectionEls = document.querySelectorAll('[id]');
+const navLinks = document.querySelectorAll('.sidebar-nav a[href^="#"]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sectionEls.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+  // Keep the cross-nav "Delivery KPI" link visually active always
+  document.querySelector('.sidebar-nav a[href*="4px-kpi-dashboard"]').classList.add('active');
+});
+
+// Sidebar close on mobile nav click
+document.querySelectorAll('.sidebar-nav a[href^="#"]').forEach(a => {
+  a.addEventListener('click', () => {
+    if (window.innerWidth <= 900) toggleSidebar();
   });
 });
 </script>
